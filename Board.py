@@ -42,6 +42,26 @@ class Grid:
                 player = 'x'
         return player
 
+    def is_game_over(self):
+        for i in range(3):
+            if self.grid[i][0] == self.grid[i][1] == self.grid[i][2]:
+                if self.grid[i][0] == 'x':
+                    return 'x'
+                elif self.grid[i][0] == '0':
+                    return '0'
+            if self.grid[0][i] == self.grid[1][i] == self.grid[2][i]:
+                if self.grid[0][i] == 'x':
+                    return 'x'
+                elif self.grid[0][i] == '0':
+                    return '0'
+        if self.grid[1][1] == self.grid[2][2] == self.grid[0][0]\
+                or self.grid[0][2] == self.grid[1][1] == self.grid[2][0]:
+            if self.grid[1][1] == 'x':
+                return 'x'
+            elif self.grid[1][1] == '0':
+                return '0'
+        return False
+
 
 g = Grid()
 g.print_grid()

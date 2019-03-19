@@ -20,6 +20,11 @@ while running:
                 y = pos[1]//200
                 player = grid.on_click(x, y, player)
                 grid.print_grid()
+                grid.is_game_over()
     grid.draw(surface)
+    win = grid.is_game_over()
+    if win != False:
+        print("Win %s" %win)
+        running = False
     pygame.display.flip()       # Update the full display Surface to the scree
 
