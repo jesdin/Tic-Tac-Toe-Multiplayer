@@ -18,11 +18,7 @@ while running:
                 pos = pygame.mouse.get_pos()
                 x = pos[0]//200
                 y = pos[1]//200
-                grid.set_cell_value(x, y, player)
-                if player == 'x':
-                    player = '0'
-                else:
-                    player = 'x'
+                player = grid.on_click(x, y, player)
                 grid.print_grid()
     grid.draw(surface)
     pygame.display.flip()       # Update the full display Surface to the scree
