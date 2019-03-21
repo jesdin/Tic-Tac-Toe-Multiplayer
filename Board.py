@@ -46,20 +46,27 @@ class Grid:
         for i in range(3):
             if self.grid[i][0] == self.grid[i][1] == self.grid[i][2]:
                 if self.grid[i][0] == 'x':
-                    return 'x'
+                    return 'x' + " Wins"
                 elif self.grid[i][0] == '0':
-                    return '0'
+                    return '0' + " Wins"
             if self.grid[0][i] == self.grid[1][i] == self.grid[2][i]:
                 if self.grid[0][i] == 'x':
-                    return 'x'
+                    return 'x' + " Wins"
                 elif self.grid[0][i] == '0':
-                    return '0'
+                    return '0' + " Wins"
         if self.grid[1][1] == self.grid[2][2] == self.grid[0][0]\
                 or self.grid[0][2] == self.grid[1][1] == self.grid[2][0]:
             if self.grid[1][1] == 'x':
-                return 'x'
+                return 'x' + " Wins"
             elif self.grid[1][1] == '0':
-                return '0'
+                return '0' + " Wins"
+        c = True
+        for i in range(3):
+            if '-' in self.grid[i]:
+                c = False
+                break
+        if c:
+            return "DRAW"
         return False
 
 

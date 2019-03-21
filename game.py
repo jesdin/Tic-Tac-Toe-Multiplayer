@@ -23,8 +23,8 @@ while running:
                 grid.is_game_over()
     grid.draw(surface)
     win = grid.is_game_over()
-    if win != False:
-        print("Win %s" %win)
+    if win:
+        print(win)
         running = False
     pygame.display.flip()       # Update the full display Surface to the scree
 
