@@ -11,6 +11,7 @@ class Grid:
         self.gridLines = [((0, 200), (600, 200)), ((0, 400), (600, 400)),
                           ((200, 0), (200, 600)), ((400, 0), (400, 600))]
         self.grid = [['-' for x in range(3)] for y in range(3)]
+        self.game_over = False
 
     def draw(self, surface):
         for line in self.gridLines:
@@ -34,31 +35,32 @@ class Grid:
 
     def on_click(self, x, y, player):
         if self.get_cell_value(x, y) == '-':
-            if player == 'x':
-                self.set_cell_value(x, y, 'x')
-                player = '0'
-            else:
-                self.set_cell_value(x, y, '0')
-                player = 'x'
+            self.set_cell_value(x, y, player)
         return player
 
     def is_game_over(self):
         for i in range(3):
             if self.grid[i][0] == self.grid[i][1] == self.grid[i][2]:
                 if self.grid[i][0] == 'x':
+                    self.game_over = True
                     return 'x' + " Wins"
                 elif self.grid[i][0] == '0':
+                    self.game_over = True
                     return '0' + " Wins"
             if self.grid[0][i] == self.grid[1][i] == self.grid[2][i]:
                 if self.grid[0][i] == 'x':
+                    self.game_over = True
                     return 'x' + " Wins"
                 elif self.grid[0][i] == '0':
+                    self.game_over = True
                     return '0' + " Wins"
         if self.grid[1][1] == self.grid[2][2] == self.grid[0][0]\
                 or self.grid[0][2] == self.grid[1][1] == self.grid[2][0]:
             if self.grid[1][1] == 'x':
+                self.game_over = True
                 return 'x' + " Wins"
             elif self.grid[1][1] == '0':
+                self.game_over = True
                 return '0' + " Wins"
         c = True
         for i in range(3):
@@ -66,8 +68,9 @@ class Grid:
                 c = False
                 break
         if c:
+            self.game_over = True
             return "DRAW"
-        return False
+        return self.game_over
 
 
 g = Grid()

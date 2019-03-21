@@ -11,7 +11,7 @@ def create_thread(my_target):
 
 
 host = '192.168.0.106'
-port = 65432
+port = 5432
 connection_established = False
 conn = None
 my_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -20,8 +20,16 @@ my_socket.listen(1)
 
 
 def receive_data():
-    pass
-
+    global turn
+    while True:
+        recv_data = str(conn.recv(1024).decode()).split("-")
+        x, y = int(recv_data[0]), int(recv_data[1])
+        if recv_data[2] == 'yourturn':
+            turn = True
+        if recv_data[3] == 'False':
+            grid.game_over = True
+        if grid.get_cell_value(x, y == '-'):
+            grid.set_cell_value(x, y, '0')
 
 def waiting_for_connection():
     global connection_established, conn
@@ -31,29 +39,35 @@ def waiting_for_connection():
     receive_data()
 
 
-create_thread(waiting_for_connection())
+create_thread(waiting_for_connection)
 surface = pygame.display.set_mode((600, 600))
 pygame.display.set_caption("Tic Tac Toe")
 
 grid = Grid()
 running = True
 player = 'x'
+turn = True
+playing = 'True'
 
 while running:
     surface.fill((0, 0, 0))     # black
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        if event.type == pygame.MOUSEBUTTONDOWN:
+        if event.type == pygame.MOUSEBUTTONDOWN and connection_established:
             if pygame.mouse.get_pressed()[0]:       # left click
-                pos = pygame.mouse.get_pos()
-                x = pos[0]//200
-                y = pos[1]//200
-                player = grid.on_click(x, y, player)
-                grid.print_grid()
-                grid.is_game_over()
+                if turn and not grid.is_game_over():
+                    pos = pygame.mouse.get_pos()
+                    x = pos[0]//200
+                    y = pos[1]//200
+                    grid.on_click(x, y, player)
+                    win = grid.is_game_over()
+                    if win:
+                        playing = 'False'
+                    data = "{}-{}-{}-{}".format(x, y, 'yourturn', playing).encode()
+                    conn.send(bytes(data))
+                    turn = False
     grid.draw(surface)
-    win = grid.is_game_over()
     if win:
         print(win)
         running = False
