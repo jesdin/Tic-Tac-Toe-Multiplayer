@@ -12,15 +12,26 @@ def create_thread(my_target):
 
 host = '192.168.0.106'
 port = 65432
+connection_established = False
+conn = None
 my_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-my_socket.connect((host, port))
+my_socket.bind((host, port))
+my_socket.listen(1)
 
 
 def receive_data():
     pass
 
 
-create_thread(receive_data())
+def waiting_for_connection():
+    global connection_established, conn
+    conn, address = my_socket.accept()        # wait for a connection
+    print("Client is Connected")
+    connection_established = True
+    receive_data()
+
+
+create_thread(waiting_for_connection())
 surface = pygame.display.set_mode((600, 600))
 pygame.display.set_caption("Tic Tac Toe")
 
