@@ -10,8 +10,8 @@ def create_thread(my_target):
     thread.start()
 
 
-host = '192.168.0.106'
-port = 5432
+host = '192.168.0.103'
+port = 65432
 my_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 my_socket.connect((host, port))
 
@@ -23,8 +23,6 @@ def receive_data():
         x, y = int(data_recv[0]), int(data_recv[1])
         if data_recv[2] == 'yourturn':
             turn = True
-        if data_recv[3] == 'False':
-            grid.game_over = True
         if grid.get_cell_value(x, y == '-'):
             grid.set_cell_value(x, y, 'x')
 
@@ -40,6 +38,7 @@ playing = 'True'
 
 while running:
     surface.fill((0, 0, 0))     # black
+    win = False
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -50,15 +49,10 @@ while running:
                     x = pos[0]//200
                     y = pos[1]//200
                     grid.on_click(x, y, player)
-                    win = grid.is_game_over()
-                    if win:
-                        playing = 'False'
-                    data = "{}-{}-{}-{}".format(x, y, 'yourturn', playing).encode()
+                    data = "{}-{}-{}".format(x, y, 'yourturn').encode()
                     my_socket.send(bytes(data))
                     turn = False
     grid.draw(surface)
-    if win:
-        print(win)
-        running = False
+    running = grid.checkWin(surface, player)
     pygame.display.flip()       # Update the full display Surface to the scree
 
