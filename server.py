@@ -24,8 +24,7 @@ def receive_data():
     while True:
         recv_data = str(conn.recv(1024).decode()).split("-")
         x, y = int(recv_data[0]), int(recv_data[1])
-        if recv_data[2] == 'yourturn':
-            turn = True
+        turn = True
         if grid.get_cell_value(x, y == '-'):
             grid.set_cell_value(x, y, '0')
 
@@ -65,7 +64,7 @@ while running:
                     x = pos[0]//200
                     y = pos[1]//200
                     grid.on_click(x, y, player)
-                    data = "{}-{}-{}".format(x, y, 'yourturn').encode()
+                    data = "{}-{}".format(x, y).encode()
                     conn.send(bytes(data))
                     turn = False
     running = grid.checkWin(surface, player)
