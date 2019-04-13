@@ -37,8 +37,13 @@ turn = False
 playing = 'True'
 
 while running:
-    surface.fill((0, 0, 0))     # black
     win = False
+    surface.fill((0, 0, 0))     # black
+    grid.draw(surface)
+    if not turn:
+        font = pygame.font.Font('freesansbold.ttf', 15)
+        text = font.render("waiting for player 1", True, (0, 255, 255))
+        surface.blit(text, (15, 600-25))
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -52,7 +57,6 @@ while running:
                     data = "{}-{}-{}".format(x, y, 'yourturn').encode()
                     my_socket.send(bytes(data))
                     turn = False
-    grid.draw(surface)
     running = grid.checkWin(surface, player)
     pygame.display.flip()       # Update the full display Surface to the scree
-
+    
