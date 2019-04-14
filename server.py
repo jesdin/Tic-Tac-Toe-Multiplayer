@@ -10,7 +10,7 @@ def create_thread(my_target):
     thread.start()
 
 
-host = '192.168.0.103'
+host = '192.168.0.106'
 port = 65432
 connection_established = False
 conn = None
@@ -63,10 +63,23 @@ while running:
                     pos = pygame.mouse.get_pos()
                     x = pos[0]//200
                     y = pos[1]//200
-                    grid.on_click(x, y, player)
-                    data = "{}-{}".format(x, y).encode()
-                    conn.send(bytes(data))
-                    turn = False
+                    if grid.get_cell_value(x, y) == '-':
+                        grid.set_cell_value(x, y, player)
+                        data = "{}-{}".format(x, y).encode()
+                        conn.send(bytes(data))
+                        turn = False
     running = grid.checkWin(surface, player)
     pygame.display.flip()       # Update the full display Surface to the scree
-    
+    if not running:
+        playerResponded = False
+        while not playerResponded:
+            for event in pygame.event.get():
+                if event.type == pygame.KEYDOWN:
+                    if pygame.key.get_pressed()[pygame.K_SPACE]:
+                        print("Space")
+                        grid.reInit()
+                        running = True
+                        playerResponded = True
+                    if pygame.key.get_pressed()[pygame.K_ESCAPE]:
+                        running =  False
+                        playerResponded = True

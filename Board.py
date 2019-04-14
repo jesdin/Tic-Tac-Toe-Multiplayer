@@ -34,11 +34,6 @@ class Grid:
     def set_cell_value(self, x, y, value):
         self.grid[y][x] = value
 
-    def on_click(self, x, y, player):
-        if self.get_cell_value(x, y) == '-':
-            self.set_cell_value(x, y, player)
-        return player
-
     def is_game_over(self):
         for i in range(3):
             if self.grid[i][0] == self.grid[i][1] == self.grid[i][2]:
@@ -95,17 +90,8 @@ class Grid:
             surface.blit(text_win, win_rect)
             surface.blit(text1, text1_rect)
             surface.blit(text2, text2_rect)
-
-            for event in pygame.event.get():
-                if event.type == pygame.KEYDOWN:
-                    if pygame.key.get_pressed()[pygame.K_SPACE]:
-                        print("Space")
-                        self.reInit()
-                        return True
-                    if pygame.key.get_pressed()[pygame.K_ESCAPE]:
-                        return False 
+            return False
         return True
-
     def reInit(self):
         for x in range(3):
             for y in range(3):
